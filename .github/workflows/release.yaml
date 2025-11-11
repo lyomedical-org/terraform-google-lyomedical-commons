@@ -1,0 +1,46 @@
+name: release
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+*"
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+  scan-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init
+      - uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          scan-ref: .
+          ignore-unfixed: true
+          format: table
+          severity: 'HIGH,CRITICAL'
+          exit-code: 1
+        continue-on-error: true
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init
+      - uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          format: github
+          output: 'dependency-results.sbom.json'
+          image-ref: .
+          github-pat: ${{env.GITHUB_TOKEN}}
+        continue-on-error: true
