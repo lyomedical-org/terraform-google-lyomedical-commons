@@ -117,10 +117,10 @@ resource "google_project_iam_member" "terraform_test_artifactregistry_admin" {
 	role="roles/artifactregistry.admin"
 	member="serviceAccount:${google_service_account.terraform_test.email}"
 }
-resource "google_project_iam_member" "terraform_production_cloudfunctions_admin" {
-	project=google_project.production.project_id
+resource "google_project_iam_member" "terraform_test_cloudfunctions_admin" {
+	project=google_project.test.project_id
 	role="roles/cloudfunctions.admin"
-	member="serviceAccount:${google_service_account.terraform_production.email}"
+	member="serviceAccount:${google_service_account.terraform_test.email}"
 }
 
 resource "google_service_account" "terraform_production" {
