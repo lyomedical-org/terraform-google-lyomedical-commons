@@ -50,6 +50,10 @@ variable "private_subnetwork_cidr" {
 	type=string
 	description="Private subnetwork cidr"
 }
+variable "public_subnetwork_cidr" {
+	type=string
+	description="Public subnetwork cidr"
+}
 
 variable "FOLDER_ID_COMMONS" {
 	type=string
