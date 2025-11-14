@@ -46,6 +46,14 @@ output "run_service_account_id_test_public" {
 	value=google_service_account.run_test_public.id
 	description="Run service account id test public"
 }
+output "run_service_account_email_production_public" {
+	value="google_service_account.run_production_public.email"
+	description="Run service account email production public"
+}
+output "run_service_account_id_production_public" {
+	value="google_service_account.run_production_public.id"
+	description="Run service account id production public"
+}
 output "run_private_vpc_access_connector_id" {
 	value=google_vpc_access_connector.run_private.id
 	description="Run private vpc access connector id"
