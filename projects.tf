@@ -42,21 +42,21 @@ resource "google_project" "production" {
 	deletion_policy="DELETE"
 }
 resource "google_project" "dev_public" {
-	project_id=var.project_id_dev
+	project_id=var.project_id_dev_public
 	name="dev-project-public"
 	folder_id=var.FOLDER_ID_PUBLIC
 	billing_account=var.BILLING_ACCOUNT_DEV
 	deletion_policy="DELETE"
 }
 resource "google_project" "test_public" {
-	project_id=var.project_id_test
+	project_id=var.project_id_test_public
 	name="test-public"
 	folder_id=var.FOLDER_ID_PUBLIC
 	billing_account=var.BILLING_ACCOUNT_TEST
 	deletion_policy="DELETE"
 }
 resource "google_project" "production_public" {
-	project_id=var.project_id_production
+	project_id=var.project_id_production_public
 	name="production-public"
 	folder_id=var.FOLDER_ID_PUBLIC
 	billing_account=var.BILLING_ACCOUNT_PRODUCTION

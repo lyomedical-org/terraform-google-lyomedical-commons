@@ -26,6 +26,18 @@ variable "project_id_production" {
 	type=string
 	description="Project id production"
 }
+variable "project_id_dev_public" {
+	type=string
+	description="Project id dev public"
+}
+variable "project_id_test_public" {
+	type=string
+	description="Project id test public"
+}
+variable "project_id_production_public" {
+	type=string
+	description="Project id production public"
+}
 variable "network_name" {
 	type=string
 	description="Network name"
