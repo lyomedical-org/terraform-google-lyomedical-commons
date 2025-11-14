@@ -1,7 +1,3 @@
-variable "project_id_commons" {
-	type=string
-	description="Project id commons"
-}
 variable "project_id_workload_identity" {
 	type=string
 	description="Project id workload identity"

@@ -38,14 +38,6 @@ output "compute_address_nat" {
 	value=google_compute_address.nat.address
 	description="Compute address nat"
 }
-output "run_ci_cd_workload_identity_provider" {
-	value=google_iam_workload_identity_pool_provider.github_provider.name
-	description="Run ci cd workload identity provider"
-}
-output "run_ci_cd_service_account_email_test_public" {
-	value=google_service_account.run_ci_cd_test_public.email
-	description="Run ci cd service account email test public"
-}
 output "run_service_account_email_test_public" {
 	value=google_service_account.run_test_public.email
 	description="Run service account email test public"
@@ -53,10 +45,6 @@ output "run_service_account_email_test_public" {
 output "run_service_account_id_test_public" {
 	value=google_service_account.run_test_public.id
 	description="Run service account id test public"
-}
-output "run_ci_cd_service_account_email_production_public" {
-	value="google_service_account.run_ci_cd_production_public.email"
-	description="Run ci cd service account email production public"
 }
 output "run_service_account_email_production_public" {
 	value="google_service_account.run_production_public.email"
@@ -73,6 +61,18 @@ output "run_private_vpc_access_connector_id" {
 output "run_public_vpc_access_connector_id" {
 	value=google_vpc_access_connector.run_public.id
 	description="Run public vpc access connector id"
+}
+output "run_ci_cd_workload_identity_provider" {
+	value=google_iam_workload_identity_pool_provider.github_provider.name
+	description="Run ci cd workload identity provider"
+}
+output "run_ci_cd_service_account_email_test_public" {
+	value=google_service_account.run_ci_cd_test_public.email
+	description="Run ci cd service account email test public"
+}
+output "run_ci_cd_service_account_email_production_public" {
+	value="google_service_account.run_ci_cd_production_public.email"
+	description="Run ci cd service account email production public"
 }
 output "storage_workload_identity_provider" {
 	value=google_iam_workload_identity_pool_provider.storage_provider.name
