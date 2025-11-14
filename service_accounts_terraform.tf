@@ -7,11 +7,6 @@ resource "google_project_iam_member" "terraform_public_resourcemanager_project_i
 	role="roles/resourcemanager.projectIamAdmin"
 	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
-resource "google_project_iam_member" "terraform_public_storage_admin" {
-	project=google_project.public.project_id
-	role="roles/storage.admin"
-	member="serviceAccount:${google_service_account.terraform_public.email}"
-}
 resource "google_project_iam_member" "terraform_public_iam_service_account_admin" {
 	project=google_project.public.project_id
 	role="roles/iam.serviceAccountAdmin"
@@ -25,6 +20,11 @@ resource "google_project_iam_member" "terraform_public_iam_service_account_user"
 resource "google_project_iam_member" "terraform_public_compute_admin" {
 	project=google_project.public.project_id
 	role="roles/compute.admin"
+	member="serviceAccount:${google_service_account.terraform_public.email}"
+}
+resource "google_project_iam_member" "terraform_public_storage_admin" {
+	project=google_project.public.project_id
+	role="roles/storage.admin"
 	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
 resource "google_project_iam_member" "terraform_test_public_resourcemanager_project_iam_admin" {
@@ -42,15 +42,15 @@ resource "google_project_iam_member" "terraform_test_public_iam_service_account_
 	role="roles/iam.serviceAccountUser"
 	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
-resource "google_project_iam_member" "terraform_test_compute_admin" {
-	project=google_project.test.project_id
+resource "google_project_iam_member" "terraform_test_public_compute_admin" {
+	project=google_project.test_public.project_id
 	role="roles/compute.admin"
-	member="serviceAccount:${google_service_account.terraform_test.email}"
+	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
-resource "google_project_iam_member" "terraform_test_cloudfunctions_admin" {
-	project=google_project.test.project_id
+resource "google_project_iam_member" "terraform_test_public_cloudfunctions_admin" {
+	project=google_project.test_public.project_id
 	role="roles/cloudfunctions.admin"
-	member="serviceAccount:${google_service_account.terraform_test.email}"
+	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
 resource "google_project_iam_member" "terraform_production_public_resourcemanager_project_iam_admin" {
 	project=google_project.production_public.project_id
@@ -67,15 +67,15 @@ resource "google_project_iam_member" "terraform_production_public_iam_service_ac
 	role="roles/iam.serviceAccountUser"
 	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
-resource "google_project_iam_member" "terraform_production_compute_admin" {
-	project=google_project.production.project_id
+resource "google_project_iam_member" "terraform_production_public_compute_admin" {
+	project=google_project.production_public.project_id
 	role="roles/compute.admin"
-	member="serviceAccount:${google_service_account.terraform_production.email}"
+	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
-resource "google_project_iam_member" "terraform_production_cloudfunctions_admin" {
-	project=google_project.production.project_id
+resource "google_project_iam_member" "terraform_production_public_cloudfunctions_admin" {
+	project=google_project.production_public.project_id
 	role="roles/cloudfunctions.admin"
-	member="serviceAccount:${google_service_account.terraform_production.email}"
+	member="serviceAccount:${google_service_account.terraform_public.email}"
 }
 
 resource "google_service_account" "terraform_dev" {
