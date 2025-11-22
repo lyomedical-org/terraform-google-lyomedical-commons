@@ -134,7 +134,7 @@ resource "null_resource" "generate_oidc_assets" {
 	provisioner "local-exec" {
 		command="chmod +x ${path.module}/scripts/oidc_generate.sh && ${path.module}/scripts/oidc_generate.sh"
 		environment={
-			GCP_PROJECT_ID=google_project.public.project_id
+			GCP_PROJECT_ID=var.project_id_public
 			BUCKET_NAME=google_storage_bucket.oidc_issuer.name
 			POOL_URI="projects/${google_project.workload_identity.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.firebase_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.firebase_provider.workload_identity_pool_provider_id}"
 			SERVICE_ACCOUNT_EMAIL=google_service_account.firebase_admin_dev.email
