@@ -31,10 +31,10 @@ resource "google_project" "dev" {
 	billing_account=var.BILLING_ACCOUNT_DEV
 	deletion_policy="DELETE"
 }
-# resource "google_firebase_project" "dev" {
-# 	provider=google-beta
-# 	project=google_project.dev.project_id
-# }
+resource "google_firebase_project" "dev" {
+	provider=google-beta
+	project=google_project.dev.project_id
+}
 resource "google_project" "test" {
 	provider=google-beta
 	project_id=var.project_id_test
@@ -43,10 +43,10 @@ resource "google_project" "test" {
 	billing_account=var.BILLING_ACCOUNT_TEST
 	deletion_policy="DELETE"
 }
-# resource "google_firebase_project" "test" {
-# 	provider=google-beta
-# 	project=google_project.test.project_id
-# }
+resource "google_firebase_project" "test" {
+	provider=google-beta
+	project=google_project.test.project_id
+}
 resource "google_project" "production" {
 	provider=google-beta
 	project_id=var.project_id_production
@@ -55,10 +55,10 @@ resource "google_project" "production" {
 	billing_account=var.BILLING_ACCOUNT_PRODUCTION
 	deletion_policy="DELETE"
 }
-# resource "google_firebase_project" "production" {
-# 	provider=google-beta
-# 	project=google_project.production.project_id
-# }
+resource "google_firebase_project" "production" {
+	provider=google-beta
+	project=google_project.production.project_id
+}
 resource "google_project" "dev_public" {
 	provider=google-beta
 	project_id=var.project_id_dev_public
