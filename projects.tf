@@ -34,6 +34,7 @@ resource "google_project" "dev" {
 resource "google_firebase_project" "dev" {
 	provider=google-beta
 	project=google_project.dev.project_id
+	depends_on=[google_project_service.firebase_dev]
 }
 resource "google_project" "test" {
 	provider=google-beta
@@ -46,6 +47,7 @@ resource "google_project" "test" {
 resource "google_firebase_project" "test" {
 	provider=google-beta
 	project=google_project.test.project_id
+	depends_on=[google_project_service.firebase_test]
 }
 resource "google_project" "production" {
 	provider=google-beta
@@ -58,6 +60,7 @@ resource "google_project" "production" {
 resource "google_firebase_project" "production" {
 	provider=google-beta
 	project=google_project.production.project_id
+	depends_on=[google_project_service.firebase_production]
 }
 resource "google_project" "dev_public" {
 	provider=google-beta
