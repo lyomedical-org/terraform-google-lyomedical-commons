@@ -67,6 +67,11 @@ resource "google_project_iam_member" "terraform_test_artifactregistry_admin_on_t
 	role="roles/artifactregistry.admin"
 	member="serviceAccount:${google_service_account.terraform_test.email}"
 }
+resource "google_project_iam_member" "terraform_test_secretmanager_admin_on_test" {
+	project=google_project.test.project_id
+	role="roles/secretmanager.admin"
+	member="serviceAccount:${google_service_account.terraform_test.email}"
+}
 resource "google_project_iam_member" "terraform_test_cloudfunctions_admin_on_test" {
 	project=google_project.test.project_id
 	role="roles/cloudfunctions.admin"
@@ -87,7 +92,7 @@ resource "google_project_iam_member" "terraform_test_iam_service_account_user_on
 	role="roles/iam.serviceAccountUser"
 	member="serviceAccount:${google_service_account.terraform_test.email}"
 }
-resource "google_project_iam_member" "terraform_testc_compute_admin_on_test_public" {
+resource "google_project_iam_member" "terraform_test_compute_admin_on_test_public" {
 	project=google_project.test_public.project_id
 	role="roles/compute.admin"
 	member="serviceAccount:${google_service_account.terraform_test.email}"
@@ -130,6 +135,11 @@ resource "google_project_iam_member" "terraform_production_storage_admin_on_prod
 resource "google_project_iam_member" "terraform_production_artifactregistry_admin_on_production" {
 	project=google_project.production.project_id
 	role="roles/artifactregistry.admin"
+	member="serviceAccount:${google_service_account.terraform_production.email}"
+}
+resource "google_project_iam_member" "terraform_production_secretmanager_admin_on_production" {
+	project=google_project.production.project_id
+	role="roles/secretmanager.admin"
 	member="serviceAccount:${google_service_account.terraform_production.email}"
 }
 resource "google_project_iam_member" "terraform_production_cloudfunctions_admin_on_production" {

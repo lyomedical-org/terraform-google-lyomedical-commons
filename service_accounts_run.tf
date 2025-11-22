@@ -71,5 +71,10 @@ resource "google_project_iam_member" "run_test_public_cloudfunctions_developer_o
 	role="roles/cloudfunctions.developer"
 	member="serviceAccount:${google_service_account.run_test_public.email}"
 }
+# resource "google_project_iam_member" "run_test_public_cloudfunctions_developer_on_test" {
+# 	project=google_project.test.project_id
+# 	role="roles/secretmanager.secretAccessor"
+# 	member="serviceAccount:${google_service_account.run_test_public.email}"
+# }
 
 

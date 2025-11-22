@@ -269,6 +269,13 @@ resource "google_project_service" "cloudbuild_test" {
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_test]
 }
+resource "google_project_service" "secretmanager_test" {
+	project=google_project.test.project_id
+	service="secretmanager.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test]
+}
 resource "google_project_service" "apikeys_test" {
 	project=google_project.test.project_id
 	service="apikeys.googleapis.com"
@@ -426,6 +433,13 @@ resource "google_project_service" "artifactregistry_production" {
 resource "google_project_service" "cloudbuild_production" {
 	project=google_project.production.project_id
 	service="cloudbuild.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production]
+}
+resource "google_project_service" "secretmanager_production" {
+	project=google_project.production.project_id
+	service="secretmanager.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_production]
