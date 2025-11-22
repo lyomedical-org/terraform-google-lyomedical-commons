@@ -131,7 +131,7 @@ resource "null_resource" "generate_oidc_assets" {
 		bucket_name=google_storage_bucket.oidc_issuer.name
 		pool_provider_id=google_iam_workload_identity_pool_provider.firebase_provider.name
 	}
-	provisioner "local_exec" {
+	provisioner "local-exec" {
 		command="chmod +x ${path.module}/scripts/generate_oidc.sh && ${path.module}/scripts/generate_oidc.sh"
 		environment={
 			GCP_PROJECT_ID=var.project_id_dev
@@ -142,13 +142,13 @@ resource "null_resource" "generate_oidc_assets" {
 			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
 		}
 	}
-	provisioner "local_exec" {
+	provisioner "local-exec" {
 		command="cat ${path.module}/files/firebase-subject-token.json"
 	}
-	provisioner "local_exec" {
+	provisioner "local-exec" {
 		command="cat ${path.module}/files/firebase-credentials.json"
 	}
-	provisioner "local_exec" {
+	provisioner "local-exec" {
 		command="rm -rf ${path.module}/files"
 	}
 	depends_on=[
