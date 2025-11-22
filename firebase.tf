@@ -1,5 +1,6 @@
 data "google_firebase_web_app_config" "web_dev" {
 	provider=google-beta
+	project=var.project_id_dev
 	web_app_id=google_firebase_web_app.web_dev.app_id
 }
 resource "google_apikeys_key" "firebase_web_dev" {
