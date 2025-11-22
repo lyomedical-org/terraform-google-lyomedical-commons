@@ -8,6 +8,17 @@ set -e
 
 echo "--> Starting OIDC generation for Bucket: $BUCKET_NAME"
 
+# 0. Authenticate gcloud
+# Terraform Cloud sets GOOGLE_APPLICATION_CREDENTIALS to a file path containing
+# the Workload Identity configuration. We pass this to gcloud to authorize the upload.
+if [ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+  echo "--> Authenticating gcloud using Workload Identity credentials..."
+  gcloud auth login --cred-file="$GOOGLE_APPLICATION_CREDENTIALS" --quiet
+  gcloud config set project "$GCP_PROJECT_ID" --quiet
+else
+  echo "--> WARNING: GOOGLE_APPLICATION_CREDENTIALS not set. Assuming environment is already authenticated."
+fi
+
 # 1. Create Temporary Directory
 TMP_DIR=$(mktemp -d)
 PRIVATE_KEY="$TMP_DIR/private.pem"

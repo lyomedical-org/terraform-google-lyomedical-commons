@@ -132,11 +132,11 @@ resource "null_resource" "generate_oidc_assets" {
 		pool_provider_id=google_iam_workload_identity_pool_provider.firebase_provider.name
 	}
 	provisioner "local-exec" {
-		command="chmod +x ${path.module}/scripts/generate_oidc.sh && ${path.module}/scripts/generate_oidc.sh"
+		command="chmod +x ${path.module}/scripts/oidc_generate.sh && ${path.module}/scripts/oidc_generate.sh"
 		environment={
-			GCP_PROJECT_ID=var.project_id_dev
+			GCP_PROJECT_ID=google_project.public.project_id
 			BUCKET_NAME=google_storage_bucket.oidc_issuer.name
-			POOL_URI="projects/${google_project.workload_identity.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.custom_oidc_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.custom_oidc_provider.workload_identity_pool_provider_id}"
+			POOL_URI="projects/${google_project.workload_identity.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.firebase_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.firebase_provider.workload_identity_pool_provider_id}"
 			SERVICE_ACCOUNT_EMAIL=google_service_account.firebase_admin_dev.email
 			OUTPUT_DIR="${path.module}/files"
 			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
@@ -152,6 +152,7 @@ resource "null_resource" "generate_oidc_assets" {
 		command="rm -rf ${path.module}/files"
 	}
 	depends_on=[
+		null_resource.oidc_setup,
 		google_storage_bucket_iam_member.oidc_issuer_public,
 		google_iam_workload_identity_pool_provider.firebase_provider
 	]

@@ -247,3 +247,21 @@ output "firebase_admin_credentials_production" {
 	description="Firebase admin credentials production"
 	sensitive=true
 }
+output "firebase_admin_credentials_dev_2" {
+	value=jsonencode({
+		type="external_account"
+		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
+		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
+		token_url="https://sts.googleapis.com/v1/token"
+		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_dev.email}:generateAccessToken"
+		credential_source={
+			file="/app/secrets/firebase-subject-token/firebase-subject-token"
+			format={
+				type="json"
+				subject_token_field_name="sub"
+			}
+		}
+	})
+	description="Firebase admin credentials dev 2"
+	sensitive=true
+}
