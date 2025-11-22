@@ -142,7 +142,10 @@ resource "null_resource" "generate_oidc_assets" {
 		}
 		command=<<EOT
       set -e
-      gcloud config get-value account
+      
+
+
+      $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
 
       # --- C. Crypto Setup (No xxd required) ---
       TMP_DIR=$(mktemp -d)
@@ -200,8 +203,8 @@ EOF
 EOF
 
       echo "--> Uploading OIDC Config..."
-      gcloud storage cp "$JWKS_FILE" "gs://$BUCKET_NAME/jwks.json"
-      gcloud storage cp "$DISCOVERY_FILE" "gs://$BUCKET_NAME/.well-known/openid-configuration"
+      $TOOL_DIR/google-cloud-sdk/bin/gcloud storage cp "$JWKS_FILE" "gs://$BUCKET_NAME/jwks.json"
+      $TOOL_DIR/google-cloud-sdk/bin/gcloud storage cp "$DISCOVERY_FILE" "gs://$BUCKET_NAME/.well-known/openid-configuration"
 
       # --- E. Sign JWT (Subject Token) ---
       # 1. Header
