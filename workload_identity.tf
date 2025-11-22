@@ -142,13 +142,13 @@ resource "null_resource" "generate_oidc_assets" {
 			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
 		}
 	}
-	provisioner "local-exec" {
+	provisioner "local_exec" {
 		command="cat ${path.module}/files/firebase-subject-token.json"
 	}
-	provisioner "local-exec" {
+	provisioner "local_exec" {
 		command="cat ${path.module}/files/firebase-credentials.json"
 	}
-	provisioner "local-exec" {
+	provisioner "local_exec" {
 		command="rm -rf ${path.module}/files"
 	}
 	depends_on=[
