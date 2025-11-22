@@ -79,7 +79,7 @@ resource "google_iam_workload_identity_pool_provider" "storage_provider" {
 		"google.subject"="assertion.sub"
 	}
 	oidc {
-		issuer_uri="https://storage.googleapis.com/${google_storage_bucket.oidc_issuer.name}"
+		issuer_uri="https://example.com"
 	}
 }
 resource "google_service_account_iam_member" "storage_workload_identity_user_test" {
