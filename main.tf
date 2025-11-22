@@ -16,13 +16,13 @@ resource "null_resource" "oidc_setup" {
 		tools="openssl,jq,curl,gcloud,sed,base64,xxd"
 	}
 	provisioner "local-exec" {
-		command="apt-get update"
+		command="sudo apt-get update"
 	}
 	provisioner "local-exec" {
-		command="apt-get install -y apt-transport-https ca-certificates gnupg curl openssl jq sed coreutils"
+		command="sudo apt-get install -y apt-transport-https ca-certificates gnupg curl openssl jq sed coreutils"
 	}
 	provisioner "local-exec" {
-		command="apt-get install -y xxd"
+		command="sudo apt-get install -y xxd"
 	}
 	provisioner "local-exec" {
 		command="curl -o gcloud.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz"
