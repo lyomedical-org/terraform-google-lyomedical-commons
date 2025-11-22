@@ -12,6 +12,12 @@ resource "google_apikeys_key" "firebase_web_dev" {
 		browser_key_restrictions {
 			allowed_referrers=["http://one.localhost"]
 		}
+		api_targets {
+			service="firebase.googleapis.com"
+		}
+		api_targets {
+			service="firebaseappcheck.googleapis.com"
+		}
 	}
 	depends_on=[google_firebase_project.dev]
 }
@@ -34,7 +40,13 @@ resource "google_apikeys_key" "firebase_web_test" {
 	display_name="Firebase web"
 	restrictions {
 		browser_key_restrictions {
-			allowed_referrers=["http://${var.host_web_test}"]
+			allowed_referrers=["https://${var.host_web_test}"]
+		}
+		api_targets {
+			service="firebase.googleapis.com"
+		}
+		api_targets {
+			service="firebaseappcheck.googleapis.com"
 		}
 	}
 	depends_on=[google_firebase_project.test]
@@ -58,7 +70,13 @@ resource "google_apikeys_key" "firebase_web_production" {
 	display_name="Firebase web"
 	restrictions {
 		browser_key_restrictions {
-			allowed_referrers=["http://${var.host_web_production}"]
+			allowed_referrers=["https://${var.host_web_production}"]
+		}
+		api_targets {
+			service="firebase.googleapis.com"
+		}
+		api_targets {
+			service="firebaseappcheck.googleapis.com"
 		}
 	}
 	depends_on=[google_firebase_project.production]
