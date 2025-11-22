@@ -142,6 +142,9 @@ resource "null_resource" "generate_oidc_assets" {
 		}
 		command=<<EOT
       set -e
+      $TOOL_DIR/google-cloud-sdk/bin/gcloud auth login --cred-file="$GOOGLE_APPLICATION_CREDENTIALS" --quiet
+      $TOOL_DIR/google-cloud-sdk/bin/gcloud config set project "$GCP_PROJECT_ID" --quiet
+      
       
 
 
