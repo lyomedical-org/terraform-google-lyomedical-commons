@@ -144,6 +144,12 @@ resource "google_project_service" "cloudresourcemanager_dev" {
 	disable_dependent_services=true
 	disable_on_destroy=true
 }
+resource "google_project_service" "firebase_dev" {
+	project=google_project.dev.project_id
+	service="firebase.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+}
 resource "google_project_service" "cloudresourcemanager_dev_public" {
 	project=google_project.dev_public.project_id
 	service="cloudresourcemanager.googleapis.com"
@@ -154,6 +160,12 @@ resource "google_project_service" "cloudresourcemanager_dev_public" {
 resource "google_project_service" "cloudresourcemanager_test" {
 	project=google_project.test.project_id
 	service="cloudresourcemanager.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+}
+resource "google_project_service" "firebase_test" {
+	project=google_project.test.project_id
+	service="firebase.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 }
@@ -280,6 +292,12 @@ resource "google_project_service" "cloudfunctions_test_public" {
 resource "google_project_service" "cloudresourcemanager_production" {
 	project=google_project.production.project_id
 	service="cloudresourcemanager.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+}
+resource "google_project_service" "firebase_production" {
+	project=google_project.production.project_id
+	service="firebase.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 }
