@@ -79,7 +79,7 @@ resource "google_iam_workload_identity_pool_provider" "storage_provider" {
 		"google.subject"="assertion.sub"
 	}
 	oidc {
-		issuer_uri="https://example.com"
+		issuer_uri="https://storage.googleapis.com/${google_storage_bucket.oidc_issuer.name}"
 	}
 }
 resource "google_service_account_iam_member" "storage_workload_identity_user_test" {
@@ -94,22 +94,20 @@ resource "google_service_account_iam_member" "storage_workload_identity_user_pro
 }
 
 resource "google_iam_workload_identity_pool" "firebase_pool" {
-	provider=google-beta
 	project=google_project.workload_identity.project_id
 	workload_identity_pool_id="firebase-pool"
 	depends_on=[google_project_service.sts_workload_identity]
 }
 resource "google_iam_workload_identity_pool_provider" "firebase_provider" {
-	provider=google-beta
 	project=google_project.workload_identity.project_id
 	workload_identity_pool_id=google_iam_workload_identity_pool.firebase_pool.workload_identity_pool_id
 	workload_identity_pool_provider_id="firebase-provider"
-	attribute_condition="google.subject==\"${local.firebase_identity_subject}\""
+	attribute_condition="assertion.sub==\"${local.firebase_identity_subject}\""
 	attribute_mapping={
 		"google.subject"="assertion.sub"
 	}
 	oidc {
-		issuer_uri="https://example.com"
+		issuer_uri="https://storage.googleapis.com/${google_storage_bucket.oidc_issuer.name}"
 	}
 }
 resource "google_service_account_iam_member" "firebase_workload_identity_user_dev" {
@@ -127,3 +125,36 @@ resource "google_service_account_iam_member" "firebase_workload_identity_user_pr
 	role="roles/iam.workloadIdentityUser"
 	member="principal://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
 }
+
+resource "null_resource" "generate_oidc_assets" {
+	triggers={
+		bucket_name=google_storage_bucket.oidc_issuer.name
+		pool_provider_id=google_iam_workload_identity_pool_provider.firebase_provider.name
+	}
+	provisioner "local_exec" {
+		command="chmod +x ${path.module}/scripts/generate_oidc.sh && ${path.module}/scripts/generate_oidc.sh"
+		environment={
+			GCP_PROJECT_ID=var.project_id_dev
+			BUCKET_NAME=google_storage_bucket.oidc_issuer.name
+			POOL_URI="projects/${google_project.workload_identity.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.custom_oidc_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.custom_oidc_provider.workload_identity_pool_provider_id}"
+			SERVICE_ACCOUNT_EMAIL=google_service_account.firebase_admin_dev.email
+			OUTPUT_DIR="${path.module}/files"
+			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
+		}
+	}
+	provisioner "local-exec" {
+		command="cat ${path.module}/files/firebase-subject-token.json"
+	}
+	provisioner "local-exec" {
+		command="cat ${path.module}/files/firebase-credentials.json"
+	}
+	provisioner "local-exec" {
+		command="rm -rf ${path.module}/files"
+	}
+	depends_on=[
+		google_storage_bucket_iam_member.oidc_issuer_public,
+		google_iam_workload_identity_pool_provider.firebase_provider
+	]
+}
+
+

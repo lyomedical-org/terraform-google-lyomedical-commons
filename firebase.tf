@@ -21,6 +21,12 @@ resource "google_apikeys_key" "firebase_web_dev" {
 		api_targets {
 			service="firebaseappcheck.googleapis.com"
 		}
+		api_targets {
+			service = "iamcredentials.googleapis.com"
+		}
+		api_targets {
+			service = "identitytoolkit.googleapis.com"
+		}
 	}
 	depends_on=[google_firebase_project.dev]
 }
@@ -51,6 +57,12 @@ resource "google_apikeys_key" "firebase_web_test" {
 		api_targets {
 			service="firebaseappcheck.googleapis.com"
 		}
+		api_targets {
+			service = "iamcredentials.googleapis.com"
+		}
+		api_targets {
+			service = "identitytoolkit.googleapis.com"
+		}
 	}
 	depends_on=[google_firebase_project.test]
 }
@@ -80,6 +92,12 @@ resource "google_apikeys_key" "firebase_web_production" {
 		}
 		api_targets {
 			service="firebaseappcheck.googleapis.com"
+		}
+		api_targets {
+			service = "iamcredentials.googleapis.com"
+		}
+		api_targets {
+			service = "identitytoolkit.googleapis.com"
 		}
 	}
 	depends_on=[google_firebase_project.production]
