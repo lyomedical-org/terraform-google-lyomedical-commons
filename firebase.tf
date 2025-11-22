@@ -18,7 +18,7 @@ resource "google_apikeys_key" "firebase_web_dev" {
 resource "google_firebase_web_app" "web_dev" {
 	provider=google-beta
 	project=var.project_id_dev
-	display_name="Web"
+	display_name="Web dev"
 	api_key_id=google_apikeys_key.firebase_web_dev.uid
 	deletion_policy="DELETE"
 }
