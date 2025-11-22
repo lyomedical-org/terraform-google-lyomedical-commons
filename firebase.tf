@@ -29,7 +29,7 @@ resource "google_firebase_app_check_recaptcha_v3_config" "web_dev" {
 	provider=google-beta
 	project=var.project_id_dev
 	app_id=google_firebase_web_app.web_dev.app_id
-	site_secret=var.RECAPTCHA_SITE_SECRET
+	site_secret=var.RECAPTCHA_SITE_SECRET_DEV
 	token_ttl="7200s"
 	depends_on=[time_sleep.wait_30s]
 }
