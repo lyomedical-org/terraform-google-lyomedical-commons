@@ -132,15 +132,121 @@ resource "null_resource" "generate_oidc_assets" {
 		pool_provider_id=google_iam_workload_identity_pool_provider.firebase_provider.name
 	}
 	provisioner "local-exec" {
-		command="chmod +x ${path.module}/scripts/oidc_generate.sh && ${path.module}/scripts/oidc_generate.sh"
 		environment={
 			GCP_PROJECT_ID=var.project_id_public
 			BUCKET_NAME=google_storage_bucket.oidc_issuer.name
 			POOL_URI="projects/${google_project.workload_identity.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.firebase_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.firebase_provider.workload_identity_pool_provider_id}"
-			SERVICE_ACCOUNT_EMAIL=google_service_account.firebase_admin_dev.email
 			OUTPUT_DIR="${path.module}/files"
 			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
+			TOOL_DIR="${path.cwd}/.terraform_tools"
 		}
+		command=<<EOT
+      set -e
+      
+      # --- A. Environment Config ---
+      # Add local tools to PATH so 'gcloud' and 'jq' commands work
+      export PATH=$TOOL_DIR:$TOOL_DIR/google-cloud-sdk/bin:$PATH
+
+      # --- B. Auth Check ---
+      if command -v gcloud >/dev/null; then
+        if [ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+          echo "--> Authenticating gcloud..."
+          gcloud auth login --cred-file="$GOOGLE_APPLICATION_CREDENTIALS" --quiet
+          gcloud config set project "$GCP_PROJECT_ID" --quiet
+        fi
+      else
+        echo "Error: gcloud not found in PATH ($PATH)."
+        exit 1
+      fi
+
+      # --- C. Crypto Setup (No xxd required) ---
+      TMP_DIR=$(mktemp -d)
+      PRIVATE_KEY="$TMP_DIR/private.pem"
+      PUBLIC_KEY="$TMP_DIR/public.pem"
+      JWKS_FILE="$TMP_DIR/jwks.json"
+      DISCOVERY_FILE="$TMP_DIR/openid-configuration"
+
+      # Generate Keys
+      openssl genrsa -out "$PRIVATE_KEY" 2048 2>/dev/null
+      openssl rsa -in "$PRIVATE_KEY" -pubout -out "$PUBLIC_KEY" 2>/dev/null
+
+      # Helper: Convert Hex to Base64URL using Python (Standard in most images)
+      hex_to_b64url() {
+        python3 -c "import sys, binascii, base64; \
+        h = sys.argv[1]; \
+        b = binascii.unhexlify(h); \
+        print(base64.urlsafe_b64encode(b).decode('utf-8').rstrip('='), end='')" "$1"
+      }
+
+      # Parse RSA details
+      MOD_HEX=$(openssl rsa -in "$PRIVATE_KEY" -noout -modulus | cut -d= -f2)
+      MOD_B64=$(hex_to_b64url "$MOD_HEX")
+      
+      EXP_HEX=$(openssl rsa -in "$PRIVATE_KEY" -noout -text | grep "publicExponent" | awk '{print $2}' | sed 's/^(0x//;s/)//')
+      if [ $(( $${#EXP_HEX} % 2 )) -eq 1 ]; then EXP_HEX="0$EXP_HEX"; fi
+      EXP_B64=$(hex_to_b64url "$EXP_HEX")
+
+      # --- D. Write & Upload JSONs ---
+      # Write JWKS
+      cat > "$JWKS_FILE" <<EOF
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "alg": "RS256",
+      "use": "sig",
+      "kid": "key-1",
+      "n": "$MOD_B64",
+      "e": "$EXP_B64"
+    }
+  ]
+}
+EOF
+
+      # Write Discovery Doc
+      cat > "$DISCOVERY_FILE" <<EOF
+{
+  "issuer": "https://storage.googleapis.com/$BUCKET_NAME",
+  "jwks_uri": "https://storage.googleapis.com/$BUCKET_NAME/jwks.json",
+  "response_types_supported": ["id_token"],
+  "subject_types_supported": ["public"],
+  "id_token_signing_alg_values_supported": ["RS256"]
+}
+EOF
+
+      echo "--> Uploading OIDC Config..."
+      gcloud storage cp "$JWKS_FILE" "gs://$BUCKET_NAME/jwks.json"
+      gcloud storage cp "$DISCOVERY_FILE" "gs://$BUCKET_NAME/.well-known/openid-configuration"
+
+      # --- E. Sign JWT (Subject Token) ---
+      # 1. Header
+      HEADER_B64=$(echo -n '{"alg":"RS256","typ":"JWT","kid":"key-1"}' | openssl base64 -e | tr -d '=' | tr '/+' '_-' | tr -d '\n')
+      
+      # 2. Payload
+      NOW=$(date +%s)
+      EXP=$(($NOW + 315360000)) # 10 Year Validity
+      
+      # Construct JSON strictly safely
+      PAYLOAD_JSON=$(printf '{"iss":"https://storage.googleapis.com/%s","sub":"$FIREBASE_IDENTITY_SUBJECT","aud":"//iam.googleapis.com/%s","iat":%d,"exp":%d}' \
+        "$BUCKET_NAME" "$POOL_URI" "$NOW" "$EXP")
+      
+      PAYLOAD_B64=$(echo -n "$PAYLOAD_JSON" | openssl base64 -e | tr -d '=' | tr '/+' '_-' | tr -d '\n')
+      
+      # 3. Sign
+      SIG_INPUT="$HEADER_B64.$PAYLOAD_B64"
+      SIG_HEX=$(echo -n "$SIG_INPUT" | openssl dgst -sha256 -sign "$PRIVATE_KEY" -hex | awk '{print $2}')
+      SIG_B64=$(hex_to_b64url "$SIG_HEX")
+      
+      JWT="$SIG_INPUT.$SIG_B64"
+
+      # --- F. Output ---
+      echo "--> Writing subject token..."
+      mkdir -p "$OUTPUT_DIR"
+      echo "{\"sub\":\"$JWT\"}" > "$OUTPUT_DIR/firebase-subject-token.json"
+      
+      # Cleanup
+      rm -rf "$TMP_DIR"
+    EOT
 	}
 	provisioner "local-exec" {
 		command="cat ${path.module}/files/firebase-subject-token.json"
