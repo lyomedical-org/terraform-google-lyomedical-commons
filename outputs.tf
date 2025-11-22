@@ -185,3 +185,65 @@ output "firebase_credentials_production" {
 	description="Firebase credentials production"
 	sensitive=true
 }
+output "firebase_subject_token" {
+	value=jsonencode({
+		sub=local.firebase_identity_subject
+		aud="app"
+	})
+	description="Firebase subject token"
+	sensitive=true
+}
+output "firebase_admin_credentials_dev" {
+	value=jsonencode({
+		type="external_account"
+		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
+		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
+		token_url="https://sts.googleapis.com/v1/token"
+		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_dev.email}:generateAccessToken"
+		credential_source={
+			file="/app/secrets/firebase-subject-token/firebase-subject-token"
+			format={
+				type="json"
+				subject_token_field_name="sub"
+			}
+		}
+	})
+	description="Firebase admin credentials dev"
+	sensitive=true
+}
+output "firebase_admin_credentials_test" {
+	value=jsonencode({
+		type="external_account"
+		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
+		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
+		token_url="https://sts.googleapis.com/v1/token"
+		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_test.email}:generateAccessToken"
+		credential_source={
+			file="/app/secrets/firebase-subject-token/firebase-subject-token"
+			format={
+				type="json"
+				subject_token_field_name="sub"
+			}
+		}
+	})
+	description="Firebase admin credentials test"
+	sensitive=true
+}
+output "firebase_admin_credentials_production" {
+	value=jsonencode({
+		type="external_account"
+		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
+		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
+		token_url="https://sts.googleapis.com/v1/token"
+		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_production.email}:generateAccessToken"
+		credential_source={
+			file="/app/secrets/firebase-subject-token/firebase-subject-token"
+			format={
+				type="json"
+				subject_token_field_name="sub"
+			}
+		}
+	})
+	description="Firebase admin credentials production"
+	sensitive=true
+}
