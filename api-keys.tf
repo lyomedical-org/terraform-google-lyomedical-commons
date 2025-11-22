@@ -5,7 +5,10 @@ resource "google_apikeys_key" "web_dev" {
 	display_name="Web"
 	restrictions {
 		browser_key_restrictions {
-			allowed_referrers=["http://one.localhost"]
+			allowed_referrers=[
+				"http://localhost:8080",
+				"http://localhost:4200"
+			]
 		}
 	}
 	depends_on=[google_project.dev]

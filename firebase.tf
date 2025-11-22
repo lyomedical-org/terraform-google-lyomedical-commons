@@ -10,7 +10,10 @@ resource "google_apikeys_key" "firebase_web_dev" {
 	display_name="Firebase web"
 	restrictions {
 		browser_key_restrictions {
-			allowed_referrers=["http://one.localhost"]
+			allowed_referrers=[
+				"http://localhost:8080",
+				"http://localhost:4200"
+			]
 		}
 		api_targets {
 			service="firebase.googleapis.com"
