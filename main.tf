@@ -7,7 +7,7 @@ locals {
 }
 
 resource "null_resource" "oidc_setup" {
-	provisioner "local_exec" {
+	provisioner "local-exec" {
 		command = "chmod +x ${path.module}/scripts/install_oidc_dependencies.sh && ${path.module}/scripts/install_oidc_dependencies.sh"
 	}
 }
