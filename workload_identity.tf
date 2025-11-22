@@ -115,15 +115,15 @@ resource "google_iam_workload_identity_pool_provider" "firebase_provider" {
 resource "google_service_account_iam_member" "firebase_workload_identity_user_dev" {
 	service_account_id=google_service_account.firebase_admin_dev.name
 	role="roles/iam.workloadIdentityUser"
-	member="principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
+	member="principal://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
 }
 resource "google_service_account_iam_member" "firebase_workload_identity_user_test" {
 	service_account_id=google_service_account.firebase_admin_test.name
 	role="roles/iam.workloadIdentityUser"
-	member="principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
+	member="principal://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
 }
 resource "google_service_account_iam_member" "firebase_workload_identity_user_production" {
 	service_account_id=google_service_account.firebase_admin_production.name
 	role="roles/iam.workloadIdentityUser"
-	member="principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
+	member="principal://iam.googleapis.com/${google_iam_workload_identity_pool.firebase_pool.name}/subject/${local.firebase_identity_subject}"
 }
