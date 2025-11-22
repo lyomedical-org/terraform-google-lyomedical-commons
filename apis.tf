@@ -149,6 +149,49 @@ resource "google_project_service" "firebase_dev" {
 	service="firebase.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_dev]
+}
+resource "google_project_service" "iam_dev" {
+	project=google_project.dev.project_id
+	service="iam.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_dev]
+}
+resource "google_project_service" "iamcredentials_dev" {
+	project=google_project.dev.project_id
+	service="iamcredentials.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.iam_dev]
+}
+resource "google_project_service" "apikeys_dev" {
+	project=google_project.dev.project_id
+	service="apikeys.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_dev]
+}
+resource "google_project_service" "firebaseappcheck_dev" {
+	project=google_project.dev.project_id
+	service="firebaseappcheck.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_dev]
+}
+resource "google_project_service" "places_backend_dev" {
+	project=google_project.dev.project_id
+	service="places-backend.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_dev]
+}
+resource "google_project_service" "maps_backend_dev" {
+	project=google_project.dev.project_id
+	service="maps-backend.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_dev]
 }
 resource "google_project_service" "cloudresourcemanager_dev_public" {
 	project=google_project.dev_public.project_id
@@ -168,6 +211,7 @@ resource "google_project_service" "firebase_test" {
 	service="firebase.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test]
 }
 resource "google_project_service" "iam_test" {
 	project=google_project.test.project_id
@@ -221,6 +265,34 @@ resource "google_project_service" "artifactregistry_test" {
 resource "google_project_service" "cloudbuild_test" {
 	project=google_project.test.project_id
 	service="cloudbuild.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test]
+}
+resource "google_project_service" "apikeys_test" {
+	project=google_project.test.project_id
+	service="apikeys.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test]
+}
+resource "google_project_service" "firebaseappcheck_test" {
+	project=google_project.test.project_id
+	service="firebaseappcheck.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test]
+}
+resource "google_project_service" "places_backend_test" {
+	project=google_project.test.project_id
+	service="places-backend.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test]
+}
+resource "google_project_service" "maps_backend_test" {
+	project=google_project.test.project_id
+	service="maps-backend.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_test]
@@ -300,6 +372,7 @@ resource "google_project_service" "firebase_production" {
 	service="firebase.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production]
 }
 resource "google_project_service" "iam_production" {
 	project=google_project.production.project_id
@@ -353,6 +426,34 @@ resource "google_project_service" "artifactregistry_production" {
 resource "google_project_service" "cloudbuild_production" {
 	project=google_project.production.project_id
 	service="cloudbuild.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production]
+}
+resource "google_project_service" "apikeys_production" {
+	project=google_project.production.project_id
+	service="apikeys.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production]
+}
+resource "google_project_service" "firebaseappcheck_production" {
+	project=google_project.production.project_id
+	service="firebaseappcheck.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production]
+}
+resource "google_project_service" "places_backend_production" {
+	project=google_project.production.project_id
+	service="places-backend.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production]
+}
+resource "google_project_service" "maps_backend_production" {
+	project=google_project.production.project_id
+	service="maps-backend.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_production]

@@ -91,6 +91,10 @@ variable "BILLING_ACCOUNT_PRODUCTION" {
 	type=string
 	description="Billing account production"
 }
+variable "RECAPTCHA_SITE_SECRET" {
+	type=string
+	description="Recaptcha site secret"
+}
 variable "TERRAFORM_ORGANIZATION_NAME" {
 	description="Terraform organization name"
 	type=string

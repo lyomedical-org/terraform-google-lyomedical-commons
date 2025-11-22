@@ -38,6 +38,20 @@ output "compute_address_nat" {
 	value=google_compute_address.nat.address
 	description="Compute address nat"
 }
+output "firebase_credentials_dev" {
+	value=jsonencode({
+		projectId=var.project_id_dev
+		appId=google_firebase_web_app.web_dev.app_id
+		apiKey=data.google_firebase_web_app_config.web_dev.api_key
+		authDomain=data.google_firebase_web_app_config.web_dev.auth_domain
+		databaseURL=lookup(data.google_firebase_web_app_config.web_dev,"database_url","")
+		storageBucket=lookup(data.google_firebase_web_app_config.web_dev,"storage_bucket","")
+		messagingSenderId=lookup(data.google_firebase_web_app_config.web_dev,"messaging_sender_id","")
+		measurementId=lookup(data.google_firebase_web_app_config.web_dev,"measurement_id","")
+	})
+	description="Firebase credentials dev"
+	sensitive=true
+}
 output "run_service_account_email_test_public" {
 	value=google_service_account.run_test_public.email
 	description="Run service account email test public"
