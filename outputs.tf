@@ -38,20 +38,6 @@ output "compute_address_nat" {
 	value=google_compute_address.nat.address
 	description="Compute address nat"
 }
-output "firebase_credentials_dev" {
-	value=jsonencode({
-		projectId=var.project_id_dev
-		appId=google_firebase_web_app.web_dev.app_id
-		apiKey=data.google_firebase_web_app_config.web_dev.api_key
-		authDomain=data.google_firebase_web_app_config.web_dev.auth_domain
-		databaseURL=lookup(data.google_firebase_web_app_config.web_dev,"database_url","")
-		storageBucket=lookup(data.google_firebase_web_app_config.web_dev,"storage_bucket","")
-		messagingSenderId=lookup(data.google_firebase_web_app_config.web_dev,"messaging_sender_id","")
-		measurementId=lookup(data.google_firebase_web_app_config.web_dev,"measurement_id","")
-	})
-	description="Firebase credentials dev"
-	sensitive=true
-}
 output "run_service_account_email_test_public" {
 	value=google_service_account.run_test_public.email
 	description="Run service account email test public"
@@ -143,5 +129,47 @@ output "storage_credentials_production" {
 		}
 	})
 	description="Storage credentials production"
+	sensitive=true
+}
+output "firebase_credentials_dev" {
+	value=jsonencode({
+		projectId=var.project_id_dev
+		appId=google_firebase_web_app.web_dev.app_id
+		apiKey=data.google_firebase_web_app_config.web_dev.api_key
+		authDomain=data.google_firebase_web_app_config.web_dev.auth_domain
+		databaseURL=lookup(data.google_firebase_web_app_config.web_dev,"database_url","")
+		storageBucket=lookup(data.google_firebase_web_app_config.web_dev,"storage_bucket","")
+		messagingSenderId=lookup(data.google_firebase_web_app_config.web_dev,"messaging_sender_id","")
+		measurementId=lookup(data.google_firebase_web_app_config.web_dev,"measurement_id","")
+	})
+	description="Firebase credentials dev"
+	sensitive=true
+}
+output "firebase_credentials_test" {
+	value=jsonencode({
+		projectId=var.project_id_test
+		appId=google_firebase_web_app.web_test.app_id
+		apiKey=data.google_firebase_web_app_config.web_test.api_key
+		authDomain=data.google_firebase_web_app_config.web_test.auth_domain
+		databaseURL=lookup(data.google_firebase_web_app_config.web_test,"database_url","")
+		storageBucket=lookup(data.google_firebase_web_app_config.web_test,"storage_bucket","")
+		messagingSenderId=lookup(data.google_firebase_web_app_config.web_test,"messaging_sender_id","")
+		measurementId=lookup(data.google_firebase_web_app_config.web_test,"measurement_id","")
+	})
+	description="Firebase credentials test"
+	sensitive=true
+}
+output "firebase_credentials_production" {
+	value=jsonencode({
+		projectId=var.project_id_production
+		appId=google_firebase_web_app.web_production.app_id
+		apiKey=data.google_firebase_web_app_config.web_production.api_key
+		authDomain=data.google_firebase_web_app_config.web_production.auth_domain
+		databaseURL=lookup(data.google_firebase_web_app_config.web_production,"database_url","")
+		storageBucket=lookup(data.google_firebase_web_app_config.web_production,"storage_bucket","")
+		messagingSenderId=lookup(data.google_firebase_web_app_config.web_production,"messaging_sender_id","")
+		measurementId=lookup(data.google_firebase_web_app_config.web_production,"measurement_id","")
+	})
+	description="Firebase credentials production"
 	sensitive=true
 }

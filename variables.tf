@@ -50,6 +50,14 @@ variable "public_subnetwork_cidr" {
 	type=string
 	description="Public subnetwork cidr"
 }
+variable "host_web_test" {
+	type=string
+	description="Host web test"
+}
+variable "host_web_production" {
+	type=string
+	description="Host web production"
+}
 
 variable "FOLDER_ID_COMMONS" {
 	type=string
@@ -94,6 +102,14 @@ variable "BILLING_ACCOUNT_PRODUCTION" {
 variable "RECAPTCHA_SITE_SECRET_DEV" {
 	type=string
 	description="Recaptcha site secret dev"
+}
+variable "RECAPTCHA_SITE_SECRET_TEST" {
+	type=string
+	description="Recaptcha site secret test"
+}
+variable "RECAPTCHA_SITE_SECRET_PRODUCTION" {
+	type=string
+	description="Recaptcha site secret production"
 }
 variable "TERRAFORM_ORGANIZATION_NAME" {
 	description="Terraform organization name"
