@@ -134,7 +134,7 @@ output "storage_credentials_production" {
 output "firebase_credentials_dev" {
 	value=jsonencode({
 		projectId=var.project_id_dev
-		appId=google_firebase_web_app.web_dev.app_id
+		appId=google_firebase_web_app.web_dev2.app_id
 		apiKey=data.google_firebase_web_app_config.web_dev.api_key
 		authDomain=data.google_firebase_web_app_config.web_dev.auth_domain
 		databaseURL=lookup(data.google_firebase_web_app_config.web_dev,"database_url","")
