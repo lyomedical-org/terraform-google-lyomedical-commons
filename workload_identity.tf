@@ -142,22 +142,7 @@ resource "null_resource" "generate_oidc_assets" {
 		}
 		command=<<EOT
       set -e
-      
-      # --- A. Environment Config ---
-      # Add local tools to PATH so 'gcloud' and 'jq' commands work
-      export PATH=$TOOL_DIR:$TOOL_DIR/google-cloud-sdk/bin:$PATH
-
-      # --- B. Auth Check ---
-      if command -v gcloud >/dev/null; then
-        if [ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
-          echo "--> Authenticating gcloud..."
-          gcloud auth login --cred-file="$GOOGLE_APPLICATION_CREDENTIALS" --quiet
-          gcloud config set project "$GCP_PROJECT_ID" --quiet
-        fi
-      else
-        echo "Error: gcloud not found in PATH ($PATH)."
-        exit 1
-      fi
+      gcloud config get-value account
 
       # --- C. Crypto Setup (No xxd required) ---
       TMP_DIR=$(mktemp -d)
