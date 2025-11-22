@@ -86,6 +86,18 @@ output "storage_service_account_email_production" {
 	value=google_service_account.storage_production.email
 	description="Storage service account email production"
 }
+output "api_key_web_dev" {
+	value=google_apikeys_key.web_dev.key_string
+	description="Api key web dev"
+}
+output "api_key_web_test" {
+	value=google_apikeys_key.web_test.key_string
+	description="Api key web test"
+}
+output "api_key_web_production" {
+	value=google_apikeys_key.web_production.key_string
+	description="Api key web production"
+}
 # todo: read sub from variables or secret manager
 output "storage_subject_token" {
 	value=jsonencode({
@@ -134,7 +146,7 @@ output "storage_credentials_production" {
 output "firebase_credentials_dev" {
 	value=jsonencode({
 		projectId=var.project_id_dev
-		appId=google_firebase_web_app.web_dev2.app_id
+		appId=google_firebase_web_app.web_dev.app_id
 		apiKey=data.google_firebase_web_app_config.web_dev.api_key
 		authDomain=data.google_firebase_web_app_config.web_dev.auth_domain
 		databaseURL=lookup(data.google_firebase_web_app_config.web_dev,"database_url","")
