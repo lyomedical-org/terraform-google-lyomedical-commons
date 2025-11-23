@@ -139,12 +139,11 @@ resource "null_resource" "generate_oidc_assets" {
 			OUTPUT_DIR="${path.module}/files"
 			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
 			TOOL_DIR="${path.cwd}/.terraform_tools"
+			CLOUDSDK_AUTH_ACCESS_TOKEN=data.google_client_config.current.access_token
 		}
 		command=<<EOT
       set -e
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
-      $TOOL_DIR/google-cloud-sdk/bin/gcloud auth login --cred-file="$GOOGLE_CREDENTIALS" --quiet
-      $TOOL_DIR/google-cloud-sdk/bin/gcloud config set project "$GCP_PROJECT_ID" --quiet
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
       # --- C. Crypto Setup (No xxd required) ---
       TMP_DIR=$(mktemp -d)
