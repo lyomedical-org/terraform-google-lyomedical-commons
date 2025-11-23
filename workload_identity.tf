@@ -143,7 +143,7 @@ resource "null_resource" "generate_oidc_assets" {
 		command=<<EOT
       set -e
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
-      $TOOL_DIR/google-cloud-sdk/bin/gcloud auth login --cred-file="$GOOGLE_APPLICATION_CREDENTIALS" --quiet
+      $TOOL_DIR/google-cloud-sdk/bin/gcloud auth login --cred-file="$GOOGLE_CREDENTIALS" --quiet
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config set project "$GCP_PROJECT_ID" --quiet
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
       # --- C. Crypto Setup (No xxd required) ---
