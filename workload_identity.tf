@@ -269,7 +269,6 @@ EOF
 		command="rm -rf ${path.module}/files"
 	}
 	depends_on=[
-		null_resource.oidc_setup,
 		google_storage_bucket_iam_member.oidc_issuer_public,
 		google_iam_workload_identity_pool_provider.firebase_provider
 	]
