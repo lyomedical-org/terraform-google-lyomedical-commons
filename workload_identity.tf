@@ -138,12 +138,36 @@ resource "null_resource" "generate_oidc_assets" {
 			POOL_URI="projects/${google_project.workload_identity.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.firebase_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.firebase_provider.workload_identity_pool_provider_id}"
 			OUTPUT_DIR="${path.module}/files"
 			FIREBASE_IDENTITY_SUBJECT=local.firebase_identity_subject
-			TOOL_DIR="${path.cwd}/.terraform_tools"
 			CLOUDSDK_AUTH_ACCESS_TOKEN=data.google_client_config.current.access_token
 		}
 		command=<<EOT
       set -e
-      ls $TOOL_DIR
+      # Define a local tools directory within the workspace
+      TOOL_DIR="${path.cwd}/.terraform_tools"
+      mkdir -p "$TOOL_DIR"
+      
+      echo "--> Checking dependencies in $TOOL_DIR..."
+
+      # 1. Install gcloud (if not found in system or local dir)
+      if [ ! -f "$TOOL_DIR/google-cloud-sdk/bin/gcloud" ] && ! command -v gcloud >/dev/null; then
+        echo "--> gcloud not found. Downloading..."
+        curl -sL -o "$TOOL_DIR/gcloud.tar.gz" https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz
+        tar -xf "$TOOL_DIR/gcloud.tar.gz" -C "$TOOL_DIR"
+        rm "$TOOL_DIR/gcloud.tar.gz"
+        echo "--> gcloud installed locally."
+      else
+        echo "--> gcloud is ready."
+      fi
+
+      # 2. Install jq (if not found in system or local dir)
+      if [ ! -f "$TOOL_DIR/jq" ] && ! command -v jq >/dev/null; then
+        echo "--> jq not found. Downloading..."
+        curl -sL -o "$TOOL_DIR/jq" https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-64
+        chmod +x "$TOOL_DIR/jq"
+        echo "--> jq installed locally."
+      else
+        echo "--> jq is ready."
+      fi
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
       # --- C. Crypto Setup (No xxd required) ---
