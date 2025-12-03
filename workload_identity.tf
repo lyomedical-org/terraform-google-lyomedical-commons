@@ -143,6 +143,7 @@ resource "null_resource" "generate_oidc_assets" {
 		}
 		command=<<EOT
       set -e
+      ls $TOOL_DIR
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
       $TOOL_DIR/google-cloud-sdk/bin/gcloud config get-value account
       # --- C. Crypto Setup (No xxd required) ---
