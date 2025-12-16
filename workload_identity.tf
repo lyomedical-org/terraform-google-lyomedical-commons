@@ -235,7 +235,7 @@ EOF
       
       # 2. Payload
       NOW=$(date +%s)
-      EXP=$(($NOW + 315360000)) # 10 Year Validity
+      EXP=$(($NOW + 31536000)) # 10 Year Validity
       
       # Construct JSON strictly safely
       PAYLOAD_JSON=$(printf '{"iss":"https://storage.googleapis.com/%s","sub":"$FIREBASE_IDENTITY_SUBJECT","aud":"//iam.googleapis.com/%s","iat":%d,"exp":%d}' \
