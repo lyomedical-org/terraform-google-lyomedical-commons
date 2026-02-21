@@ -74,10 +74,6 @@ output "run_ci_cd_service_account_email_production_public" {
 	value="google_service_account.run_ci_cd_production_public.email"
 	description="Run ci cd service account email production public"
 }
-output "storage_workload_identity_provider" {
-	value=google_iam_workload_identity_pool_provider.storage_provider.name
-	description="Storage workload identity provider"
-}
 output "storage_service_account_email_test" {
 	value=google_service_account.storage_test.email
 	description="Storage service account email test"
@@ -85,6 +81,16 @@ output "storage_service_account_email_test" {
 output "storage_service_account_email_production" {
 	value=google_service_account.storage_production.email
 	description="Storage service account email production"
+}
+output "storage_service_account_key_test" {
+	value=base64decode(google_service_account_key.storage_test.private_key)
+	description="Service account key test"
+	sensitive=true
+}
+output "storage_service_account_key_production" {
+	value=base64decode(google_service_account_key.storage_production.private_key)
+	description="Service account key production"
+	sensitive=true
 }
 output "api_key_web_dev" {
 	value=google_apikeys_key.web_dev.key_string
@@ -97,51 +103,6 @@ output "api_key_web_test" {
 output "api_key_web_production" {
 	value=google_apikeys_key.web_production.key_string
 	description="Api key web production"
-}
-# todo: read sub from variables or secret manager
-output "storage_subject_token" {
-	value=jsonencode({
-		sub=local.storage_identity_subject
-		aud="app"
-	})
-	description="Storage subject token"
-	sensitive=true
-}
-output "storage_credentials_test" {
-	value=jsonencode({
-		type="external_account"
-		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.storage_provider.name}"
-		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
-		token_url="https://sts.googleapis.com/v1/token"
-		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.storage_test.email}:generateAccessToken"
-		credential_source={
-			file="/app/secrets/storage-subject-token/storage-subject-token"
-			format={
-				type="json"
-				subject_token_field_name="sub"
-			}
-		}
-	})
-	description="Storage credentials test"
-	sensitive=true
-}
-output "storage_credentials_production" {
-	value=jsonencode({
-		type="external_account"
-		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.storage_provider.name}"
-		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
-		token_url="https://sts.googleapis.com/v1/token"
-		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.storage_production.email}:generateAccessToken"
-		credential_source={
-			file="/app/secrets/storage-subject-token/storage-subject-token"
-			format={
-				type="json"
-				subject_token_field_name="sub"
-			}
-		}
-	})
-	description="Storage credentials production"
-	sensitive=true
 }
 output "firebase_credentials_dev" {
 	value=jsonencode({
@@ -183,85 +144,5 @@ output "firebase_credentials_production" {
 		measurementId=lookup(data.google_firebase_web_app_config.web_production,"measurement_id","")
 	})
 	description="Firebase credentials production"
-	sensitive=true
-}
-output "firebase_subject_token" {
-	value=jsonencode({
-		sub=local.firebase_identity_subject
-		aud="app"
-	})
-	description="Firebase subject token"
-	sensitive=true
-}
-output "firebase_admin_credentials_dev" {
-	value=jsonencode({
-		type="external_account"
-		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
-		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
-		token_url="https://sts.googleapis.com/v1/token"
-		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_dev.email}:generateAccessToken"
-		credential_source={
-			file="/app/secrets/firebase-subject-token/firebase-subject-token"
-			format={
-				type="json"
-				subject_token_field_name="sub"
-			}
-		}
-	})
-	description="Firebase admin credentials dev"
-	sensitive=true
-}
-output "firebase_admin_credentials_test" {
-	value=jsonencode({
-		type="external_account"
-		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
-		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
-		token_url="https://sts.googleapis.com/v1/token"
-		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_test.email}:generateAccessToken"
-		credential_source={
-			file="/app/secrets/firebase-subject-token/firebase-subject-token"
-			format={
-				type="json"
-				subject_token_field_name="sub"
-			}
-		}
-	})
-	description="Firebase admin credentials test"
-	sensitive=true
-}
-output "firebase_admin_credentials_production" {
-	value=jsonencode({
-		type="external_account"
-		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
-		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
-		token_url="https://sts.googleapis.com/v1/token"
-		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_production.email}:generateAccessToken"
-		credential_source={
-			file="/app/secrets/firebase-subject-token/firebase-subject-token"
-			format={
-				type="json"
-				subject_token_field_name="sub"
-			}
-		}
-	})
-	description="Firebase admin credentials production"
-	sensitive=true
-}
-output "firebase_admin_credentials_dev_2" {
-	value=jsonencode({
-		type="external_account"
-		audience="//iam.googleapis.com/${google_iam_workload_identity_pool_provider.firebase_provider.name}"
-		subject_token_type="urn:ietf:params:oauth:token-type:jwt"
-		token_url="https://sts.googleapis.com/v1/token"
-		service_account_impersonation_url="https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.firebase_admin_dev.email}:generateAccessToken"
-		credential_source={
-			file="/app/secrets/firebase-subject-token/firebase-subject-token"
-			format={
-				type="json"
-				subject_token_field_name="sub"
-			}
-		}
-	})
-	description="Firebase admin credentials dev 2"
 	sensitive=true
 }
