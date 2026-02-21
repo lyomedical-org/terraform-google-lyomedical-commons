@@ -74,6 +74,10 @@ output "run_ci_cd_service_account_email_production_public" {
 	value="google_service_account.run_ci_cd_production_public.email"
 	description="Run ci cd service account email production public"
 }
+output "storage_service_account_email_dev" {
+	value=google_service_account.storage_dev.email
+	description="Storage service account email dev"
+}
 output "storage_service_account_email_test" {
 	value=google_service_account.storage_test.email
 	description="Storage service account email test"
@@ -81,6 +85,11 @@ output "storage_service_account_email_test" {
 output "storage_service_account_email_production" {
 	value=google_service_account.storage_production.email
 	description="Storage service account email production"
+}
+output "storage_service_account_key_dev" {
+	value=base64decode(google_service_account_key.storage_dev.private_key)
+	description="Service account key dev"
+	sensitive=true
 }
 output "storage_service_account_key_test" {
 	value=base64decode(google_service_account_key.storage_test.private_key)
