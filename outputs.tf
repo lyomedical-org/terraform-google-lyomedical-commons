@@ -88,17 +88,17 @@ output "storage_service_account_email_production" {
 }
 output "storage_service_account_key_dev" {
 	value=base64decode(google_service_account_key.storage_dev.private_key)
-	description="Service account key dev"
+	description="Storage service account key dev"
 	sensitive=true
 }
 output "storage_service_account_key_test" {
 	value=base64decode(google_service_account_key.storage_test.private_key)
-	description="Service account key test"
+	description="Storage service account key test"
 	sensitive=true
 }
 output "storage_service_account_key_production" {
 	value=base64decode(google_service_account_key.storage_production.private_key)
-	description="Service account key production"
+	description="Storage service account key production"
 	sensitive=true
 }
 output "api_key_web_dev" {
@@ -112,6 +112,21 @@ output "api_key_web_test" {
 output "api_key_web_production" {
 	value=google_apikeys_key.web_production.key_string
 	description="Api key web production"
+}
+output "firebase_service_account_key_dev" {
+	value=base64decode(google_service_account_key.firebase_admin_dev.private_key)
+	description="Firebase service account key dev"
+	sensitive=true
+}
+output "firebase_service_account_key_test" {
+	value=base64decode(google_service_account_key.firebase_admin_test.private_key)
+	description="Firebase service account key test"
+	sensitive=true
+}
+output "firebase_service_account_key_production" {
+	value=base64decode(google_service_account_key.firebase_admin_production.private_key)
+	description="Firebase service account key production"
+	sensitive=true
 }
 output "firebase_credentials_dev" {
 	value=jsonencode({
