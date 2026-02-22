@@ -262,13 +262,6 @@ resource "google_project_service" "artifactregistry_test" {
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_test]
 }
-resource "google_project_service" "cloudbuild_test" {
-	project=google_project.test.project_id
-	service="cloudbuild.googleapis.com"
-	disable_dependent_services=true
-	disable_on_destroy=true
-	depends_on=[google_project_service.cloudresourcemanager_test]
-}
 resource "google_project_service" "secretmanager_test" {
 	project=google_project.test.project_id
 	service="secretmanager.googleapis.com"
@@ -367,6 +360,13 @@ resource "google_project_service" "cloudfunctions_test_public" {
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_test_public]
 }
+resource "google_project_service" "cloudbuild_test_public" {
+	project=google_project.test_public.project_id
+	service="cloudbuild.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_test_public]
+}
 
 resource "google_project_service" "cloudresourcemanager_production" {
 	project=google_project.production.project_id
@@ -426,13 +426,6 @@ resource "google_project_service" "logging_production" {
 resource "google_project_service" "artifactregistry_production" {
 	project=google_project.production.project_id
 	service="artifactregistry.googleapis.com"
-	disable_dependent_services=true
-	disable_on_destroy=true
-	depends_on=[google_project_service.cloudresourcemanager_production]
-}
-resource "google_project_service" "cloudbuild_production" {
-	project=google_project.production.project_id
-	service="cloudbuild.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_production]
@@ -531,6 +524,13 @@ resource "google_project_service" "run_production_public" {
 resource "google_project_service" "cloudfunctions_production_public" {
 	project=google_project.production_public.project_id
 	service="cloudfunctions.googleapis.com"
+	disable_dependent_services=true
+	disable_on_destroy=true
+	depends_on=[google_project_service.cloudresourcemanager_production_public]
+}
+resource "google_project_service" "cloudbuild_production_public" {
+	project=google_project.production_public.project_id
+	service="cloudbuild.googleapis.com"
 	disable_dependent_services=true
 	disable_on_destroy=true
 	depends_on=[google_project_service.cloudresourcemanager_production_public]
