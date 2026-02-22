@@ -47,11 +47,11 @@ output "run_service_account_id_test_public" {
 	description="Run service account id test public"
 }
 output "run_service_account_email_production_public" {
-	value="google_service_account.run_production_public.email"
+	value=google_service_account.run_production_public.email
 	description="Run service account email production public"
 }
 output "run_service_account_id_production_public" {
-	value="google_service_account.run_production_public.id"
+	value=google_service_account.run_production_public.id
 	description="Run service account id production public"
 }
 output "run_private_vpc_access_connector_id" {
@@ -71,7 +71,7 @@ output "run_ci_cd_service_account_email_test_public" {
 	description="Run ci cd service account email test public"
 }
 output "run_ci_cd_service_account_email_production_public" {
-	value="google_service_account.run_ci_cd_production_public.email"
+	value=google_service_account.run_ci_cd_production_public.email
 	description="Run ci cd service account email production public"
 }
 output "storage_service_account_email_dev" {
