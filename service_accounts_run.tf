@@ -11,10 +11,25 @@ resource "google_project_iam_member" "serverless_robot_test_vpcaccess_user_on_sv
 		google_project_service.run_test_public
 	]
 }
-resource "google_project_iam_member" "gcf_agent_project_storage_viewer_on_test" {
+resource "google_project_iam_member" "serverless_robot_project_storage_viewer_on_test" {
 	project=google_project.test.project_id
 	role="roles/storage.objectViewer"
 	member="serviceAccount:service-${google_project.test_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+resource "google_project_iam_member" "serverless_robot_cloudfunctions_developer_on_test" {
+	project=google_project.test.project_id
+	role="roles/cloudfunctions.developer"
+	member="serviceAccount:service-${google_project.test_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+resource "google_project_iam_member" "gcf_agent_project_storage_viewer_on_test" {
+	project=google_project.test.project_id
+	role="roles/storage.objectViewer"
+	member="serviceAccount:service-${google_project.test_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
+}
+resource "google_project_iam_member" "gcf_agent_cloudfunctions_developer_on_test" {
+	project=google_project.test.project_id
+	role="roles/cloudfunctions.developer"
+	member="serviceAccount:service-${google_project.test_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
 }
 resource "google_project_iam_member" "run_test_public_iam_service_account_user_on_test_public" {
 	project=google_project.test_public.project_id
