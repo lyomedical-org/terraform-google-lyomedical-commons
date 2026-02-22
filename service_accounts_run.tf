@@ -61,6 +61,11 @@ resource "google_project_iam_member" "run_test_public_storage_object_admin_on_te
 	role="roles/storage.objectAdmin"
 	member="serviceAccount:${google_service_account.run_test_public.email}"
 }
+resource "google_project_iam_member" "run_test_public_storage_object_admin_on_test_public" {
+	project=google_project.test_public.project_id
+	role="roles/storage.objectAdmin"
+	member="serviceAccount:${google_service_account.run_test_public.email}"
+}
 resource "google_project_iam_member" "run_test_public_artifactregistry_admin_on_test" {
 	project=google_project.test.project_id
 	role="roles/artifactregistry.admin"
