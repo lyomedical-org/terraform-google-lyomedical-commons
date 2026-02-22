@@ -16,6 +16,11 @@ resource "google_project_iam_member" "serverless_robot_cloudfunctions_developer_
 	role="roles/cloudfunctions.developer"
 	member="serviceAccount:service-${google_project.test_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }
+resource "google_project_iam_member" "gcf_agent_project_storage_viewer_on_test" {
+	project=google_project.test.project_id
+	role="roles/storage.objectViewer"
+	member="serviceAccount:service-${google_project.test_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
+}
 resource "google_project_iam_member" "gcf_agent_cloudfunctions_developer_on_test" {
 	project=google_project.test.project_id
 	role="roles/cloudfunctions.developer"
