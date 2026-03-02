@@ -2,7 +2,7 @@ resource "google_service_account" "run_test_public" {
 	project=google_project.test_public.project_id
 	account_id="cloud-run"
 }
-resource "google_project_iam_member" "serverless_robot_test_vpcaccess_user_on_svpc_host" {
+resource "google_project_iam_member" "serverless_robot_test_public_vpcaccess_user_on_svpc_host" {
 	project=google_project.svpc_host.project_id
 	role="roles/vpcaccess.user"
 	member="serviceAccount:service-${google_project.test_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
@@ -11,20 +11,25 @@ resource "google_project_iam_member" "serverless_robot_test_vpcaccess_user_on_sv
 		google_project_service.run_test_public
 	]
 }
-resource "google_project_iam_member" "serverless_robot_cloudfunctions_developer_on_test" {
+resource "google_project_iam_member" "serverless_robot_test_public_cloudfunctions_developer_on_test" {
 	project=google_project.test.project_id
 	role="roles/cloudfunctions.developer"
 	member="serviceAccount:service-${google_project.test_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }
-resource "google_project_iam_member" "gcf_agent_project_storage_viewer_on_test" {
+resource "google_project_iam_member" "gcf_agent_test_public_storage_viewer_on_test" {
 	project=google_project.test.project_id
 	role="roles/storage.objectViewer"
 	member="serviceAccount:service-${google_project.test_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
 }
-resource "google_project_iam_member" "gcf_agent_cloudfunctions_developer_on_test" {
+resource "google_project_iam_member" "gcf_agent_test_public_cloudfunctions_developer_on_test" {
 	project=google_project.test.project_id
 	role="roles/cloudfunctions.developer"
 	member="serviceAccount:service-${google_project.test_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
+}
+resource "google_project_iam_member" "developer_test_public_cloudbuild_builds_builder_on_test_public" {
+	project=google_project.test_public.project_id
+	role="roles/cloudbuild.builds.builder"
+	member="serviceAccount:${google_project.test_public.number}-compute@developer.gserviceaccount.com"
 }
 resource "google_project_iam_member" "run_test_public_iam_service_account_user_on_test_public" {
 	project=google_project.test_public.project_id
@@ -101,7 +106,7 @@ resource "google_service_account" "run_production_public" {
 	project=google_project.production_public.project_id
 	account_id="cloud-run"
 }
-resource "google_project_iam_member" "serverless_robot_production_vpcaccess_user_on_svpc_host" {
+resource "google_project_iam_member" "serverless_robot_production_public_vpcaccess_user_on_svpc_host" {
 	project=google_project.svpc_host.project_id
 	role="roles/vpcaccess.user"
 	member="serviceAccount:service-${google_project.production_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
@@ -110,20 +115,25 @@ resource "google_project_iam_member" "serverless_robot_production_vpcaccess_user
 		google_project_service.run_production_public
 	]
 }
-resource "google_project_iam_member" "serverless_robot_cloudfunctions_developer_on_production" {
+resource "google_project_iam_member" "serverless_robot_production_public_cloudfunctions_developer_on_production" {
 	project=google_project.production.project_id
 	role="roles/cloudfunctions.developer"
 	member="serviceAccount:service-${google_project.production_public.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }
-resource "google_project_iam_member" "gcf_agent_project_storage_viewer_on_production" {
+resource "google_project_iam_member" "gcf_agent_production_public_storage_viewer_on_production" {
 	project=google_project.production.project_id
 	role="roles/storage.objectViewer"
 	member="serviceAccount:service-${google_project.production_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
 }
-resource "google_project_iam_member" "gcf_agent_cloudfunctions_developer_on_production" {
+resource "google_project_iam_member" "gcf_agent_production_public_cloudfunctions_developer_on_production" {
 	project=google_project.production.project_id
 	role="roles/cloudfunctions.developer"
 	member="serviceAccount:service-${google_project.production_public.number}@gcf-admin-robot.iam.gserviceaccount.com"
+}
+resource "google_project_iam_member" "developer_production_public_cloudbuild_builds_builder_on_production_public" {
+	project=google_project.production_public.project_id
+	role="roles/cloudbuild.builds.builder"
+	member="serviceAccount:${google_project.production_public.number}-compute@developer.gserviceaccount.com"
 }
 resource "google_project_iam_member" "run_production_public_iam_service_account_user_on_production_public" {
 	project=google_project.production_public.project_id
