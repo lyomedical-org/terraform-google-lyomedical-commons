@@ -87,14 +87,4 @@ resource "google_vpc_access_connector" "run_public" {
 	max_instances=10
 	depends_on=[google_project_service.vpcaccess_svpc_host]
 }
-resource "google_vpc_access_connector" "run_private" {
-	project=google_project.svpc_host.project_id
-	name="run-private"
-	region=var.GCP_REGION
-	subnet {
-		name=google_compute_subnetwork.private.name
-	}
-	min_instances=2
-	max_instances=10
-	depends_on=[google_project_service.vpcaccess_svpc_host]
-}
+
